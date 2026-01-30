@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resume to SaaS Portfolio</title>
+    <link rel="stylesheet" href="/portfolio.css">
+    <style>
+        .upload-box { 
+            max-width: 500px; margin: 100px auto; text-align: center; 
+            border: 2px dashed var(--border); padding: 50px; border-radius: 20px;
+        }
+        #loading { display: none; color: var(--primary); font-weight: bold; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="upload-box">
+        <h1>🚀 Resume Converter</h1>
+        <p>Upload your PDF to generate a professional SaaS-style portfolio.</p>
+        <input type="file" id="resume" accept=".pdf" style="margin: 20px 0;">
+        <br>
+        <button class="btn-primary" onclick="convert()">Generate My Website</button>
+        <div id="loading">✨ AI is reading your resume... please wait...</div>
+    </div>
+
+    <script>
+        async function convert() {
+            const fileInput = document.getElementById('resume');
+            if (!fileInput.files[0]) return alert("Please select a PDF!");
+
+            document.getElementById('loading').style.display = 'block';
+            
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                try {
+                    const response = await fetch('/api/convert', {
+                        method: 'POST',
+                        body: e.target.result
+                    });
+                    const html = await response.text();
+                    const newWin = window.open();
+                    newWin.document.write(html);
+                } catch (err) {
+                    alert("Error generating portfolio.");
+                } finally {
+                    document.getElementById('loading').style.display = 'none';
+                }
+            };
+            reader.readAsArrayBuffer(fileInput.files[0]);
+        }
+    </script>
+</body>
+</html>
