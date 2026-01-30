@@ -1,5 +1,5 @@
-const PDFParse = require('pdf-parse');
-const { Groq } = require('groq-sdk');
+import PDFParse from 'pdf-parse';
+import { Groq } from 'groq-sdk';
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
